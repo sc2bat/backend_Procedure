@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.ezen.spg16.dao.IMemberDao">
+
+	<!-- 결과로 얻어지는 값들을 해쉬맵형태로 저장할 예정 별칭 memberMap -->
+	<resultMap id="memberMap" type="java.util.HashMap"></resultMap>
+
+<!--  statementType="CALLABLE" 프로시저 사용하겠다는 뜻 -->
+	<select id="getMember" statementType="CALLABLE" parameterType="java.util.HashMap">
+		<!-- 여기서는 EXEC 대신 CALL 사용 -->
+<!-- 		{CALL getMember(#{userid, mode=IN}, #{ref_cursor, mode=OUT})} IN 은 생략가능-->
+		{CALL getMember(#{userid}, 
+			#{ref_cursor, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=memberMap})}
+	
+	</select>
+</mapper>
+
+<!-- 문서 루트 요소 "resultMap"은(는) DOCTYPE 루트 "mapper"과(와) 일치해야 합니다.
+	<resultMap></resultMap> 을 mapper 안이아니라 그 위에 작성되어서 나온 에러  -->

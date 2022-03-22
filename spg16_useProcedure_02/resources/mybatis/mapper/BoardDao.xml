@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ezen.spg16.dao.IBoardDao">
+<!-- resultMap 의 id 가 같으면 충돌가능성이 있음 -->
+<!-- ++ 다른 xml 파일에서도 id가 같으면 Result Maps collection (try using the full name including the namespace 에러발생-->
+	<resultMap id="boardMap" type="java.util.HashMap"></resultMap>
+	<resultMap id="replyMap" type="java.util.HashMap"></resultMap>
+	
+<!-- 	<select id="selectBoard" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{CALL selectBoard(#{ref_cursor, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=boardMap})
+	</select> -->
+	<select id="selectBoard" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{CALL selectBoard(
+		#{startNum}, #{endNum}, 
+		#{ref_cursor, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=boardMap})
+	</select> 
+	<select id="getAllCount" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{CALL getAllCount(#{cnt, mode=OUT, jdbcType=INTEGER})
+	</select>
+	
+	<update id="plusReadCount" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{CALL plusReadCount(#{num})}
+	</update>
+	
+	<select id="boardView" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{CALL boardView(#{num},
+			#{ref_cursor1, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=boardMap}, 
+			#{ref_cursor2, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=replyMap})}
+			<!-- 하나의 태그안에서 resultMap 2개 이상사용하려면 그에 맞춰서 resultMap 선언해줘야함 -->
+	</select>
+	
+	<select id="getBoardOne" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{CALL getBoardOne(#{num},
+			#{ref_cursor_board, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=boardMap})}
+	</select>
+	
+</mapper>
+
+<!-- org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): com.ezen.spg16.dao.BoardDao.selectBoard
+파라미터 앞에 # 빼먹었음 
++ namespace 철자 틀림 확인할것
+-->

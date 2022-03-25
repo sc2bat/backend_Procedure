@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ezen.spm17.dao.ImemberDao">
+	<resultMap id="memberMap" type="java.util.HashMap"></resultMap>
+	
+	<select id="getMember" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{CALL getMember_shop(
+			#{userid},
+			#{ref_cursor_loginCheck, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=memberMap}	
+		)}
+	</select>
+	
+	<select id="selectAddressByDong" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{CALL selectAddressByDong(
+			#{dong},
+			#{cursor_dong, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=memberMap}	
+		)}
+	</select>
+	
+	<insert id="insertMember" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{CALL insertMember_shop(#{userid}, #{pwd}, #{name}, #{email}, #{phone}, #{zip_num}, #{address}, #{address2})}
+	</insert>
+	
+	<update id="updateMember" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{CALL updateMember(#{USERID}, #{PWD}, #{NAME}, #{EMAIL}, #{PHONE}, #{ZIP_NUM}, #{ADDRESS}, #{ADDRESS2})}
+	</update>
+	
+</mapper>
